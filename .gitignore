@@ -1,0 +1,11 @@
+de_in/*
+de_out/*
+groundmeshapp/*
+projects/*
+re_in/*
+re_out/*
+source/*
+templates/*
+*.txt
+*.scene
+*.boulder
