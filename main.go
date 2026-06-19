@@ -28,9 +28,13 @@ func main() {
 		if err != nil {
 			fmt.Printf("reading gmesh file: %s\n", err)
 		}
+		fmt.Printf("reading from %s\n", path)
 		tokens := token.Tokenize(content)
 		gm := parseGmesh(tokens)
-		makeGM(gm, "out.boulder")
+		base := filepath.Base(path)
+		name := base[:len(base)-len(filepath.Ext(path))]
+		makeGM(gm, "boulders/"+name+".boulder")
+		fmt.Printf("outputting to %s\n", name+".boulder")
 	}
 }
 
