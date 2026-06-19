@@ -18,7 +18,7 @@ const vertexSize = 8 * 4 // 8 floats per vertex
 func main() {
 	var paths []string
 	filepath.WalkDir("./boulders", func(path string, d os.DirEntry, err error) error {
-		if !d.IsDir() {
+		if !d.IsDir() && filepath.Ext(path) == ".gmesh" {
 			paths = append(paths, path)
 		}
 		return nil
