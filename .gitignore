@@ -6,6 +6,7 @@ re_in/*
 re_out/*
 source/*
 templates/*
+boulders/*
 *.txt
 *.scene
 *.boulder

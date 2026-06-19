@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func outputFR(topVertices, topIndices, sideVertices, sideIndices, frontVertices []byte, gm GroundMesh) {
+func outputFR(topVertices, topIndices, sideVertices, sideIndices, frontVertices []byte, gm GroundMesh, outPath string) {
 	// build the polygon for the GroundPolygon and CollisionShape
 	var left, right, bottom, top float64
 	polygonString := ""
@@ -35,7 +35,7 @@ func outputFR(topVertices, topIndices, sideVertices, sideIndices, frontVertices 
 	topTextureMapping := fmt.Sprintf(textureMappingComponent, 984, gm.TopTexture, 250.0)
 	bottomTextureMapping := fmt.Sprintf(textureMappingComponent, 985, gm.BottomTexture, 250.0)
 	outputString := groundPolygonComponentString + groundMeshComponentString + groundMeshGeneratorComponent + collisionShapeComponentString + topTextureMapping + bottomTextureMapping + "        LocalAabb{" + boundingSquareString + "}\n"
-	os.WriteFile("out.boulder", []byte(outputString), 0o777)
+	os.WriteFile(outPath, []byte(outputString), 0o777)
 }
 
 // 98 == 0x62 == b for boulder
