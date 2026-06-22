@@ -5,7 +5,7 @@ install the go toolchain and run `go build`
 make a directory called `boulders` and make one or more files in it with this format:
 
 ```
-// x and y positions of the vertices (these have to go in clockwise order)
+// x and y positions of the vertices (these have to go in anti-clockwise order)
 Vertex[
     -2.60 -2.15
     -2.28 -1.31
