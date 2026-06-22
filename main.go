@@ -28,13 +28,12 @@ func main() {
 		if err != nil {
 			fmt.Printf("reading gmesh file: %s\n", err)
 		}
-		fmt.Printf("reading from %s\n", path)
 		tokens := token.Tokenize(content)
 		gm := parseGmesh(tokens)
 		base := filepath.Base(path)
 		name := base[:len(base)-len(filepath.Ext(path))]
-		makeGM(gm, "boulders/"+name+".boulder")
-		fmt.Printf("outputting to %s\n", name+".boulder")
+		makeGM(gm, "boulder_out/"+name+".boulder")
+		fmt.Printf("\x1b[0m\x1b[1;32mbuilt\x1b[0m %s\n", name+".boulder")
 	}
 }
 
@@ -69,20 +68,17 @@ func makeGM(gm GroundMesh, outPath string) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Printf("topmesh: %d verts, %d tris\n", len(topVertices)/(4*8), len(topIndices)/6)
 	}
 	// sides
 	sideVertices, sideIndices, err := sideMesh(gm)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Printf("sidemesh: %d verts, %d faces\n", len(sideVertices)/(4*8), len(sideIndices)/(2*3))
 	// front
 	face, err := faceMesh(gm)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Printf("facemesh: %d verts, %d faces\n", len(face)/(4*8), len(face)/(4*8*3))
 	outputFR(topVertices, topIndices, sideVertices, sideIndices, face, gm, outPath)
 }
 
