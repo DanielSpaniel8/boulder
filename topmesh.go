@@ -46,10 +46,24 @@ func makeTopMeshSegment(gm GroundMesh, i int, indexOffset int, uOffset float64) 
 		vertexData = append(vertexData, encodeFloat(vertex.U)...)
 		vertexData = append(vertexData, encodeFloat(vertex.V)...)
 	}
-	for _, tri := range topIndices {
+	if !isTopSegment(gm, i+1) {
+		for _, tri := range topIndicesLeft {
+			indexData = append(indexData, encodeUShort(tri[0]+indexOffset)...)
+			indexData = append(indexData, encodeUShort(tri[1]+indexOffset)...)
+			indexData = append(indexData, encodeUShort(tri[2]+indexOffset)...)
+		}
+	}
+	for _, tri := range topIndicesMiddle {
 		indexData = append(indexData, encodeUShort(tri[0]+indexOffset)...)
 		indexData = append(indexData, encodeUShort(tri[1]+indexOffset)...)
 		indexData = append(indexData, encodeUShort(tri[2]+indexOffset)...)
+	}
+	if !isTopSegment(gm, i-1) {
+		for _, tri := range topIndicesRight {
+			indexData = append(indexData, encodeUShort(tri[0]+indexOffset)...)
+			indexData = append(indexData, encodeUShort(tri[1]+indexOffset)...)
+			indexData = append(indexData, encodeUShort(tri[2]+indexOffset)...)
+		}
 	}
 
 	return vertexData, indexData
@@ -110,18 +124,41 @@ func isTopSegment(gm GroundMesh, i int) bool {
 	return math.Abs(angle-180) < gm.TopAngle
 }
 
-var topIndices = [][]int{
-	// there also doesn't seem to be a way to make these procedurally
+// var topIndices = [][]int{
+// 	// there also doesn't seem to be a way to make these procedurally
+// 	{0, 4, 5},
+// 	{0, 3, 4},
+// 	{0, 1, 3},
+// 	{1, 2, 3},
+// 	{6, 10, 11},
+// 	{7, 6, 11},
+// 	{7, 11, 12},
+// 	{8, 7, 12},
+// 	{8, 12, 13},
+// 	{9, 8, 13},
+// 	{14, 19, 18},
+// 	{14, 18, 17},
+// 	{14, 17, 15},
+// 	{17, 16, 15},
+// }
+
+var topIndicesLeft = [][]int{
 	{0, 4, 5},
 	{0, 3, 4},
 	{0, 1, 3},
 	{1, 2, 3},
+}
+
+var topIndicesMiddle = [][]int{
 	{6, 10, 11},
 	{7, 6, 11},
 	{7, 11, 12},
 	{8, 7, 12},
 	{8, 12, 13},
 	{9, 8, 13},
+}
+
+var topIndicesRight = [][]int{
 	{14, 19, 18},
 	{14, 18, 17},
 	{14, 17, 15},

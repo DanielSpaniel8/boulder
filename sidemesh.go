@@ -15,8 +15,6 @@ func sideMesh(gm GroundMesh) (vertices []byte, indices []byte, err error) {
 		prevVertex = vertex
 		normal := vertexNormal(gm.Polygon, i)
 		// write back and front vertices
-		// TODO add two more vertices at the end with the same positions as the first two but different texture mapping
-		// the game doesn't do this, but it might be a nice upgrade
 		for _, depth := range []float64{gm.MinDepth + 5, gm.MaxDepth - 5} {
 			// pos x y z
 			vertexBits = append(vertexBits, encodeFloat(vertex.X)...)
@@ -31,6 +29,23 @@ func sideMesh(gm GroundMesh) (vertices []byte, indices []byte, err error) {
 			vertexBits = append(vertexBits, encodeFloat(depth*textureSpaceFactor+0.5)...)
 		}
 	}
+	// add two more vertices at the end with the same positions as the first two but different texture mapping
+	lastPoint := gm.Polygon[0]
+	lastNormal := vertexNormal(gm.Polygon, 0)
+	totalDistance += distance(Vector2{lastPoint.X, lastPoint.Y}, Vector2{prevVertex.X, prevVertex.Y}) * textureSpaceFactor
+	for _, depth := range []float64{gm.MinDepth + 5, gm.MaxDepth - 5} {
+		// pos x y z
+		vertexBits = append(vertexBits, encodeFloat(lastPoint.X)...)
+		vertexBits = append(vertexBits, encodeFloat(lastPoint.Y)...)
+		vertexBits = append(vertexBits, encodeFloat(depth)...)
+		// normal x y z
+		vertexBits = append(vertexBits, encodeFloat(lastNormal.X)...)
+		vertexBits = append(vertexBits, encodeFloat(lastNormal.Y)...)
+		vertexBits = append(vertexBits, encodeFloat(0)...)
+		// texture mapping u v
+		vertexBits = append(vertexBits, encodeFloat(totalDistance)...)
+		vertexBits = append(vertexBits, encodeFloat(depth*textureSpaceFactor+0.5)...)
+	}
 	indexBits := []byte{}
 	for i := range len(gm.Polygon) * 2 {
 		v := i / 2
@@ -41,13 +56,13 @@ func sideMesh(gm GroundMesh) (vertices []byte, indices []byte, err error) {
 			continue
 		}
 		if i%2 == 0 {
-			indexBits = append(indexBits, encodeUShort((i)%(len(gm.Polygon)*2))...)
-			indexBits = append(indexBits, encodeUShort((i+2)%(len(gm.Polygon)*2))...)
-			indexBits = append(indexBits, encodeUShort((i+3)%(len(gm.Polygon)*2))...)
+			indexBits = append(indexBits, encodeUShort((i))...)
+			indexBits = append(indexBits, encodeUShort((i + 2))...)
+			indexBits = append(indexBits, encodeUShort((i + 3))...)
 		} else {
-			indexBits = append(indexBits, encodeUShort((i)%(len(gm.Polygon)*2))...)
-			indexBits = append(indexBits, encodeUShort((i-1)%(len(gm.Polygon)*2))...)
-			indexBits = append(indexBits, encodeUShort((i+2)%(len(gm.Polygon)*2))...)
+			indexBits = append(indexBits, encodeUShort((i))...)
+			indexBits = append(indexBits, encodeUShort((i - 1))...)
+			indexBits = append(indexBits, encodeUShort((i + 2))...)
 		}
 	}
 	return vertexBits, indexBits, nil

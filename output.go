@@ -27,13 +27,16 @@ func outputFR(topVertices, topIndices, sideVertices, sideIndices, frontVertices 
 	// the bounding box and square are used for LocalAabbs and BoundingBoxs
 	boundingBoxString := fmt.Sprintf("X %f Y %f Z -50 Width %f Height %f Depth 100", left, bottom, (-left)+right, (-bottom)+top)
 	boundingSquareString := fmt.Sprintf("X %f Y %f Width %f Height %f", left, bottom, (-left)+right, (-bottom)+top)
+
 	groundPolygonComponentString := fmt.Sprintf(groundPolygonComponent, polygonString, gm.MinDepth, gm.MaxDepth)
-	topMeshString := ""
-	topMeshString += fmt.Sprintf(surfaceMesh, len(topVertices)/vertexSize, len(topIndices)/triSize, gm.TopTexture, boundingBoxString, Quote(topVertices, '"'), Quote(topIndices, '"'))
+
+	topMeshString := fmt.Sprintf(surfaceMesh, len(topVertices)/vertexSize, len(topIndices)/triSize, gm.TopTexture, boundingBoxString, Quote(topVertices, '"'), Quote(topIndices, '"'))
 	groundMeshComponentString := fmt.Sprintf(groundMeshComponent, boundingSquareString, topMeshString, len(sideVertices)/vertexSize, len(sideIndices)/triSize, gm.BottomTexture, boundingBoxString, Quote(sideVertices, '"'), Quote(sideIndices, '"'), len(frontVertices)/vertexSize, len(frontVertices)/(3*vertexSize), gm.BottomTexture, boundingBoxString, Quote(frontVertices, '"'))
 	collisionShapeComponentString := fmt.Sprintf(collisionShapeComponent, polygonString, gm.MinDepth, gm.MaxDepth)
+
 	topTextureMapping := fmt.Sprintf(textureMappingComponent, 984, gm.TopTexture, 250.0)
 	bottomTextureMapping := fmt.Sprintf(textureMappingComponent, 985, gm.BottomTexture, 250.0)
+
 	outputString := groundPolygonComponentString + groundMeshComponentString + groundMeshGeneratorComponent + collisionShapeComponentString + topTextureMapping + bottomTextureMapping + "        LocalAabb{" + boundingSquareString + "}\n"
 	os.WriteFile(outPath, []byte(outputString), 0o777)
 }

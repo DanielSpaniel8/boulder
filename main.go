@@ -92,7 +92,7 @@ func parseGmesh(tokens []token.Token) GroundMesh {
 		MinDepth:      -45,
 		MaxDepth:      45,
 		Aabb:          Aabb{},
-		TopAngle:      20,
+		TopAngle:      45,
 		GenerateTop:   true,
 		TopTexture:    "grass_subtle",
 		BottomTexture: "maybegood",
