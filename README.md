@@ -2,7 +2,7 @@
 install the go toolchain and run `go build`
 
 # Usage
-make a directory called `boulders` and make one or more files in it with this format:
+make a directory called `boulders` and make one or more .gmesh files in it with this format:
 
 ```
 // x and y positions of the vertices (these have to go in anti-clockwise order)
@@ -32,7 +32,7 @@ TopTexture "graveyard_grass_2x"
 BottomTexture "graveyard_ground_2x"
 ```
 
-then run the executable (`boulder` for linux, `boulder.exe` for windows) and for every input file there should be an output file in the `boulders` directory with the .boulder extension. this will contain all the components necessary for a groundmesh object (GroundPolygon, GroundMesh, GroundMeshGenerator, TexureMapping and CollisionShape) as well as a LocalAabb message. you can copy this in to a filerift file and put in an object definition like this:
+then run the executable (`boulder` for linux, `boulder.exe` for windows) and for every input file there should be an output file in the `boulder_out` directory with the .boulder extension. this will contain all the components necessary for a groundmesh object (GroundPolygon, GroundMesh, GroundMeshGenerator, TexureMapping and CollisionShape) as well as a LocalAabb message. you can copy this in to a filerift file and put in an object definition like this:
 
 ```
 Object{
